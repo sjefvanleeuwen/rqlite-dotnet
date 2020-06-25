@@ -32,7 +32,7 @@ Executions can be used to execute sql statements such as "INSERT, "DROP TABLE fo
 
 ```csharp
 var createTable = client.Execute("CREATE TABLE foo (id integer not null primary key, name text)");
-var createFiona = client.Execute("INSERT INTO foo(name) VALUES(\"fiona\")");
+var createFiona = await client.ExecuteAsync("INSERT INTO foo(name) VALUES(\"fiona\")");
 ```
 
 ## Perform a query
@@ -66,7 +66,7 @@ You can perform multiple sql statements in one transaction. Please use the flag 
 
 ```csharp
 RqLiteFlags maskTransaction = RqLiteFlags.Transaction;
-var transaction = client.ExecuteAsync(new string[] {
+var transaction = await client.ExecuteAsync(new string[] {
     "INSERT INTO foo(name) VALUES(\"gary\")",
     "INSERT INTO foo(name) VALUES(\"fred\")"
 }, maskTransaction);
