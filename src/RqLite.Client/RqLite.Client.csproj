@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageId>RqLite.Client</PackageId>
+    <Authors>Sjef van Leeuwen</Authors>
+    <Company>Morstead</Company>
+    <Product>rqlite-dotnet</Product>
+    <PackageProjectUrl>https://github.com/sjefvanleeuwen/rqlite-dotnet</PackageProjectUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/sjefvanleeuwen/rqlite-dotnet</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>rqlite dotnet client database raft</PackageTags>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Title>rqlite dotnet client</Title>
+    <Description>rqlite distributed database client. rqlite is a RAFT implementation on top of sqlite that provides a reliable way to store data across a cluster of machines. It’s open-source and available on GitHub. rqlite gracefully handles leader elections during network partitions and will tolerate machine failure, including the leader.</Description>
+    <NeutralLanguage></NeutralLanguage>
+    <Copyright>Copyright (c) 2020 Sjef van Leeuwen</Copyright>
+    <PackageIcon>rqlite-dotnet-emblem-512.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageVersion>0.0.1-alpha</PackageVersion>
+    <PackageReleaseNotes>In alpha stage but should be usable, please check project page for current status.</PackageReleaseNotes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\doc\img\rqlite-dotnet-emblem-512.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+</Project>

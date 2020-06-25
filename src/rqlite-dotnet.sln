@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30128.74
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RqLite.Client", "RqLite.Client\RqLite.Client.csproj", "{B46111AA-D93F-452D-B3CE-6495FC0895A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RqLite.Client.Tests", "RqLite.Client.Tests\RqLite.Client.Tests.csproj", "{6171654E-CFDA-400E-8FF7-46F9B45E62F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B46111AA-D93F-452D-B3CE-6495FC0895A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B46111AA-D93F-452D-B3CE-6495FC0895A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B46111AA-D93F-452D-B3CE-6495FC0895A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B46111AA-D93F-452D-B3CE-6495FC0895A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6171654E-CFDA-400E-8FF7-46F9B45E62F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6171654E-CFDA-400E-8FF7-46F9B45E62F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6171654E-CFDA-400E-8FF7-46F9B45E62F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6171654E-CFDA-400E-8FF7-46F9B45E62F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B585675-7E4A-4655-A92E-850BDAF0E877}
+	EndGlobalSection
+EndGlobal
