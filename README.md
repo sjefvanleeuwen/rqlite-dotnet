@@ -1,6 +1,8 @@
 ![rqlite-dotnet](doc/img/rqlite-dotnet.svg)
 
 [![nuget](https://img.shields.io/nuget/v/RqLite.Client)](https://www.nuget.org/packages/RqLite.Client/)
+![.NET Core](https://github.com/sjefvanleeuwen/rqlite-dotnet/workflows/.NET%20Core/badge.svg)
+
 # What is it?
 
 A lightweight database dot net HTTP API client for rqlite. rqlite is a lightweight, distributed relational database, which uses SQLite as its storage engine. Forming a cluster is very straightforward, it gracefully handles leader elections, and tolerates failures of machines, including the leader. rqlite is available for Linux, OSX, and Microsoft Windows.
