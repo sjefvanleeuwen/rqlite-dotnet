@@ -73,3 +73,43 @@ var transaction = await client.ExecuteAsync(new string[] {
     "INSERT INTO foo(name) VALUES(\"fred\")"
 }, maskTransaction);
 ```
+## Integration Tests
+
+The project contains a couple of simple integration tests. To test, it suffices to start up a single node rqlite docker container.
+
+```
+docker run --name rqlite -p 4001:4001 -p4002:4002 rqlite/rqlite
+```
+
+This will spin up rqlite, with an in memory database with the service listening on port 4001. The raft will automatically
+be upgraded to leader (from Follow state) on port 4002. This will be sufficient to do some easy integration tests.
+
+```
+            _ _ _
+           | (_) |
+  _ __ __ _| |_| |_ ___
+ | '__/ _  | | | __/ _ \   The lightweight, distributed
+ | | | (_| | | | ||  __/   relational database.
+ |_|  \__, |_|_|\__\___|
+         | |               www.rqlite.com
+         |_|
+
+[rqlited] 2021/01/29 23:29:02 rqlited starting, version v5.9.0, commit e9332ded2f4d9fa232cde2c670b876dcc53a5133, branch master
+[rqlited] 2021/01/29 23:29:02 go1.14, target architecture is amd64, operating system target is linux
+[rqlited] 2021/01/29 23:29:02 no preexisting node state detected in /rqlite/file/data, node may be bootstrapping
+[rqlited] 2021/01/29 23:29:02 no join addresses set
+[store] 2021/01/29 23:29:02 opening store with node ID 0.0.0.0:4002
+[store] 2021/01/29 23:29:02 ensuring directory at /rqlite/file/data exists
+[store] 2021/01/29 23:29:02 SQLite in-memory database opened
+2021-01-29T23:29:02.591Z [INFO]  raft: initial configuration: index=0 servers=[]
+[store] 2021/01/29 23:29:02 executing new cluster bootstrap
+2021-01-29T23:29:02.592Z [INFO]  raft: entering follower state: follower="Node at [::]:4002 [Follower]" leader=
+2021-01-29T23:29:04.499Z [WARN]  raft: heartbeat timeout reached, starting election: last-leader=
+2021-01-29T23:29:04.499Z [INFO]  raft: entering candidate state: node="Node at [::]:4002 [Candidate]" term=2
+2021-01-29T23:29:04.510Z [INFO]  raft: election won: tally=1
+2021-01-29T23:29:04.510Z [INFO]  raft: entering leader state: leader="Node at [::]:4002 [Leader]"
+[store] 2021/01/29 23:29:04 waiting for up to 2m0s for application of initial logs
+[http] 2021/01/29 23:29:04 service listening on [::]:4001
+[rqlited] 2021/01/29 23:29:04 node is ready
+
+```
