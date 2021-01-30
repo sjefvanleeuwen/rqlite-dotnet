@@ -6,11 +6,12 @@ namespace RqLite.Client.Tests
 {
     public class ClientTests
     {
+        private const string connectionString = "http://localhost:4001,http://localhost:4002,http://localhost:4003";
+
         [Fact]
         [Trait("Category", "Integration")]
         public void ShouldPerformBasicFunctions()
         {
-            var connectionString = "http://localhost:4001,http://localhost:4002,http://localhost:4003";
             RqLiteFlags maskDefault = (RqLiteFlags.Pretty | RqLiteFlags.Timings | RqLiteFlags.Transaction);
             RqLiteFlags maskTransaction = (RqLiteFlags.Transaction);
             var client = new RqLiteClient(connectionString);
@@ -45,7 +46,6 @@ namespace RqLite.Client.Tests
         [Trait("Category","Integration")]
         public async void ShouldPerformBasicFunctionsAsync()
         {
-            var connectionString = "http://localhost:4001,http://localhost:4002,http://localhost:4003";
             RqLiteFlags maskDefault = (RqLiteFlags.Pretty | RqLiteFlags.Timings | RqLiteFlags.Transaction);
             RqLiteFlags maskTransaction = (RqLiteFlags.Transaction);
             var client = new RqLiteClient(connectionString);
