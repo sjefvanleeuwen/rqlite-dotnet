@@ -87,11 +87,12 @@ namespace RqLite.Client
         {
             Exception ex = null;
             var content = createPayload(sqlStatements, flags, parameters);
+            HttpResponseMessage response = null;
             for (int i = 0; i < endpoint_uri.Count(); i++)
             {
                 try
                 {
-                    var response = await client.PostAsync(raftLeaderEndpoint.ToString() + "db/execute?" + getFlagsQueryString(flags), content);
+                    response = await client.PostAsync(raftLeaderEndpoint.ToString() + "db/execute?" + getFlagsQueryString(flags), content);
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         return await response.Content.ReadAsStringAsync();
                     if (response.StatusCode == System.Net.HttpStatusCode.MovedPermanently)
@@ -100,6 +101,10 @@ namespace RqLite.Client
                 }
                 catch (Exception ex1)
                 {
+                    if (ex1.HResult == -2146233088)
+                    {
+                        throw new RqLiteQueryException(sqlStatements.ElementAt(0), response);
+                    }
                     raftLeaderEndpoint = endpoint_uri[i];
                     ex = ex1;
                     continue;
