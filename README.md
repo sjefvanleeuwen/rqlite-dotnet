@@ -14,7 +14,7 @@ rqlite uses Raft to achieve consensus across all the instances of the SQLite dat
 ## Install NuGet
 
 ```
-dotnet add package RqLite.Client --version 0.0.1-alpha
+dotnet add package RqLite.Client --version 0.0.2-alpha
 ```
 
 or visit the nuget for other options on: https://www.nuget.org/packages/RqLite.Client/
