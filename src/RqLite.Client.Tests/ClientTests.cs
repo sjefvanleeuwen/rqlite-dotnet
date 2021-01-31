@@ -86,7 +86,7 @@ namespace RqLite.Client.Tests
             var parameters = new object[] { "fiona", 20 };
             var createFiona = await client.ExecuteAsync("INSERT INTO foo(name,age) VALUES(?,?)", parameters);
             Assert.Contains("\"last_insert_id\":1,", createFiona);
-            var readFiona = await client.QueryAsync("SELECT * FROM FOO WHERE name=?", maskDefault, parameters[0] );
+            var readFiona = await client.QueryAsync("SELECT * FROM FOO WHERE name=?", parameters[0] );
             Assert.Contains("fiona", readFiona);
             Assert.Contains("20", readFiona);
         }

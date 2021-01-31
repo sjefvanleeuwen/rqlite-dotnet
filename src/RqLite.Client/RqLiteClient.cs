@@ -113,6 +113,11 @@ namespace RqLite.Client
             return QueryAsync(sqlStatement, flags).Result;
         }
 
+        public async Task<string> QueryAsync(string sqlStatement, params object[] parameters)
+        {
+            return QueryAsync(sqlStatement, 0, parameters).Result;
+        }
+
         public async Task<string> QueryAsync(string sqlStatement, RqLiteFlags flags = 0, params object[] parameters)
         {
             Exception ex = null;
