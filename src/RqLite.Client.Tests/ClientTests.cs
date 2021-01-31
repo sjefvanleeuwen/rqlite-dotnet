@@ -1,12 +1,10 @@
-using System;
-using System.Linq;
 using Xunit;
 
 namespace RqLite.Client.Tests
 {
     public class ClientTests
     {
-        private const string connectionString = "http://localhost:4001,http://localhost:4002,http://localhost:4003";
+        public static string connectionString = "http://localhost:4001,http://localhost:4002,http://localhost:4003";
 
         [Fact]
         [Trait("Category", "Integration")]
@@ -74,6 +72,23 @@ namespace RqLite.Client.Tests
             Assert.Contains("time", readFiona);
             // Check json pretty print
             Assert.Contains("\n", readFiona);
+        }
+
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async void ShouldPerformParameterizedWriteAsync()
+        {
+            RqLiteFlags maskDefault = (RqLiteFlags.Pretty | RqLiteFlags.Timings | RqLiteFlags.Transaction);
+            var client = new RqLiteClient(connectionString);
+            var dropTable = await client.ExecuteAsync("DROP TABLE foo");
+            var createTable = await client.ExecuteAsync("CREATE TABLE foo (id integer not null primary key, name text, age int)");
+            Assert.Equal(dropTable, createTable);
+            var parameters = new object[] { "fiona", 20 };
+            var createFiona = await client.ExecuteAsync("INSERT INTO foo(name,age) VALUES(?,?)", parameters);
+            Assert.Contains("\"last_insert_id\":1,", createFiona);
+            var readFiona = await client.QueryAsync("SELECT * FROM FOO WHERE name=?", maskDefault, parameters[0] );
+            Assert.Contains("fiona", readFiona);
+            Assert.Contains("20", readFiona);
         }
     }
 }

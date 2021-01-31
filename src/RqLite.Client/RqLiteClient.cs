@@ -44,10 +44,49 @@ namespace RqLite.Client
             return ExecuteAsync(sqlStatements, flags).Result;
         }
 
-        public async Task<string> ExecuteAsync(IEnumerable<string> sqlStatements, RqLiteFlags flags = 0)
+        public async Task<string> ExecuteAsync(string sqlStatement, params object[] parameters)
+        {
+            return await ExecuteAsync(new[] { sqlStatement }, RqLiteFlags.None, parameters);
+        }
+
+        public async Task<string> ExecuteAsync(string sqlStatement, RqLiteFlags flags, params object[] parameters)
+        {
+
+            return await ExecuteAsync(new[] { sqlStatement }, flags, parameters);
+        }
+
+        private StringContent createPayload(IEnumerable<string> sqlStatements, RqLiteFlags flags = 0, params object[] parameters)
+        {
+            StringContent content = null;
+            if (parameters.Length == 0)
+            {
+                content = new StringContent(JsonSerializer.Serialize(sqlStatements), Encoding.UTF8, "application/json");
+            }
+            else
+            {
+                if (sqlStatements.Count() > 1)
+                {
+                    throw new Exception("This Rqlite client does not (yet) support multiple parameterized SQL statements in one transaction.");
+                }
+                else
+                {
+                    var parameterizedPayload = new object[parameters.Count() + 1];
+                    parameterizedPayload[0] = sqlStatements.ElementAt(0);
+                    for (int i = 0; i < parameters.Count(); i++)
+                    {
+                        parameterizedPayload[i + 1] = parameters[i];
+                    }
+                    content = new StringContent(JsonSerializer.Serialize(new[] { parameterizedPayload }), Encoding.UTF8, "application/json");
+
+                }
+            }
+            return content;
+        }
+
+        public async Task<string> ExecuteAsync(IEnumerable<string> sqlStatements, RqLiteFlags flags = 0, params object[] parameters)
         {
             Exception ex = null;
-            StringContent content = new StringContent(JsonSerializer.Serialize(sqlStatements), Encoding.UTF8, "application/json");
+            var content = createPayload(sqlStatements, flags, parameters);
             for (int i = 0; i < endpoint_uri.Count(); i++)
             {
                 try
@@ -74,15 +113,25 @@ namespace RqLite.Client
             return QueryAsync(sqlStatement, flags).Result;
         }
 
-        public async Task<string> QueryAsync(string sqlStatement, RqLiteFlags flags = 0)
+        public async Task<string> QueryAsync(string sqlStatement, RqLiteFlags flags = 0, params object[] parameters)
         {
             Exception ex = null;
+            var content = createPayload(new[] { sqlStatement }, flags, parameters);
             for (int i = 0; i < endpoint_uri.Count(); i++)
             {
                 try
                 {
-                    string uri = raftLeaderEndpoint.ToString() + "db/query?" + getFlagsQueryString(flags) + "&q=" + Uri.EscapeDataString(sqlStatement);
-                    var response = await client.GetAsync(uri);
+                    string uri = null;
+                    HttpResponseMessage response = null;
+                    if (parameters.Length == 0)
+                    {
+                        uri = raftLeaderEndpoint.ToString() + "db/query?" + getFlagsQueryString(flags) + "&q=" + Uri.EscapeDataString(sqlStatement);
+                        response = await client.GetAsync(uri);
+                    }
+                    else
+                    {
+                        response = await client.PostAsync(raftLeaderEndpoint.ToString() + "db/query?" + getFlagsQueryString(flags), content);
+                    }
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         return await response.Content.ReadAsStringAsync();
                     if (response.StatusCode == System.Net.HttpStatusCode.MovedPermanently)
