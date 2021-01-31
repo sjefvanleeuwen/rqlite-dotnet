@@ -73,6 +73,20 @@ var transaction = await client.ExecuteAsync(new string[] {
     "INSERT INTO foo(name) VALUES(\"fred\")"
 }, maskTransaction);
 ```
+
+### Parameterized Execute (since 0.0.2-alpha)
+
+```csharp
+var parameters = new object[] { "fiona", 20 };
+var createFiona = await client.ExecuteAsync("INSERT INTO foo(name,age) VALUES(?,?)", parameters);
+```
+
+### Parameterized Query
+```csharp
+var parameters = new object[] { "fiona", 20 };
+var readFiona = await client.QueryAsync("SELECT * FROM foo WHERE name=?", parameters[0] );
+```
+
 ## Integration Tests
 
 The project contains a couple of simple integration tests. To test, it suffices to start up a single node rqlite docker container.
