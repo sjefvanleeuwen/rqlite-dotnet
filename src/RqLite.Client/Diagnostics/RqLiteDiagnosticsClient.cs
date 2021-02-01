@@ -9,9 +9,9 @@ namespace RqLite.Client.Diagnostics
     {
         private static readonly HttpClient client = new HttpClient();
 
-        public async Task<RqLiteDiagnosticsConfiguration> GetDiagnostics(string uri)
+        public static async Task<RqLiteDiagnosticsConfiguration> GetDiagnostics(string uri)
         {
-            var response = await client.GetAsync(uri + "/status");
+            var response = await client.GetAsync(uri.TrimEnd('/') + "/status");
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 return  RqLiteDiagnosticsSerializer.FromJson(await response.Content.ReadAsStringAsync());
             throw new Exception(response.StatusCode.ToString());
