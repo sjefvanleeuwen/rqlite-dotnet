@@ -24,6 +24,12 @@
     <PackageVersion>0.0.2-alpha</PackageVersion>
     <PackageReleaseNotes>In alpha stage but should be usable, please check project page for current status.</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Raft\Model\**" />
+    <EmbeddedResource Remove="Raft\Model\**" />
+    <None Remove="Raft\Model\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="5.0.1" />
   </ItemGroup>
@@ -36,8 +42,5 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Raft\Model\" />
   </ItemGroup>
 </Project>
