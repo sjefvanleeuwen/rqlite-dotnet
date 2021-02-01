@@ -6,6 +6,8 @@
 
     public partial class RqLiteDiagnosticsConfiguration
     {
+        public List<Exception> Exceptions { get; set; }
+
         [JsonPropertyName("build")]
         public Build Build { get; set; }
 
