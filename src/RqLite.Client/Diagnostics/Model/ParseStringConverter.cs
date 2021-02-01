@@ -21,9 +21,17 @@ namespace RqLite.Client.Diagnostics.Model
                 if (Int64.TryParse(reader.GetString(), out number))
                     return number;
             }
-
-            // fallback to default handling
-            return reader.GetInt64();
+            try
+            {
+                // fallback to default handling
+                return reader.GetInt64();
+            }
+            catch (System.InvalidOperationException ex)
+            {
+                if (string.IsNullOrEmpty(reader.GetString()))
+                    return long.MinValue;
+                else throw ex;
+            }
         }
 
         public override void Write(Utf8JsonWriter writer, long value, JsonSerializerOptions options)
