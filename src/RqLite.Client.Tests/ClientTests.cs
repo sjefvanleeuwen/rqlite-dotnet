@@ -4,7 +4,7 @@ namespace RqLite.Client.Tests
 {
     public class ClientTests
     {
-        public static string connectionString = "http://localhost:4001,http://localhost:4002,http://localhost:4003";
+        public static string connectionString = "http://localhost:4001,http://localhost:4003,http://localhost:4005";
 
         [Fact]
         [Trait("Category", "Integration")]
