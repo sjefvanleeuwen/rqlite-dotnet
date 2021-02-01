@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RqLite.Client", "RqLite.Client\RqLite.Client.csproj", "{B46111AA-D93F-452D-B3CE-6495FC0895A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RqLite.Client", "RqLite.Client\RqLite.Client.csproj", "{B46111AA-D93F-452D-B3CE-6495FC0895A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RqLite.Client.Tests", "RqLite.Client.Tests\RqLite.Client.Tests.csproj", "{6171654E-CFDA-400E-8FF7-46F9B45E62F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RqLite.Client.Tests", "RqLite.Client.Tests\RqLite.Client.Tests.csproj", "{6171654E-CFDA-400E-8FF7-46F9B45E62F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RqLite.Client.Benchmarks", "RqLite.Client.Benchmarks\RqLite.Client.Benchmarks.csproj", "{CAE75F76-4D82-443A-AEB4-780B632217C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6171654E-CFDA-400E-8FF7-46F9B45E62F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6171654E-CFDA-400E-8FF7-46F9B45E62F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6171654E-CFDA-400E-8FF7-46F9B45E62F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAE75F76-4D82-443A-AEB4-780B632217C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAE75F76-4D82-443A-AEB4-780B632217C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAE75F76-4D82-443A-AEB4-780B632217C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAE75F76-4D82-443A-AEB4-780B632217C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

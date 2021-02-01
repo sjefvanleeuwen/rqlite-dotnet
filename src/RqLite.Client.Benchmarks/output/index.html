@@ -1,0 +1,22 @@
+﻿<head>
+    <meta http-equiv="refresh" content="1">
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-1.1.0.min.js"></script>
+    <script src="benchmark.js"></script>
+</head>
+<body>
+
+    <div id="myDiv" style="width: 960px; height: 400px;"><!-- Plotly chart will be drawn inside this DIV --></div>
+    <script>
+        var config = {
+            /*modeBarButtonsToRemove: ['toImage', 'sendDataToCloud'],*/
+            displaylogo: false,
+        };
+
+        var layout = {
+            showlegend: true,
+        };
+
+        Plotly.newPlot('myDiv', data, layout, config);
+    </script>
+</body>
