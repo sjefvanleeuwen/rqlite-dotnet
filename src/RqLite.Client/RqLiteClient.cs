@@ -101,11 +101,21 @@ namespace RqLite.Client
                 }
                 catch (Exception ex1)
                 {
-                    if (ex1.HResult == -2146233088)
+                    switch (ex1.HResult)
                     {
-                        throw new RqLiteQueryException(sqlStatements.ElementAt(0), response);
+                        case -2147467259: // Connection refused, select a new leader.
+                            if (i==endpoint_uri.Length)
+                                throw new Exception("No RqLite Leader Node found.", ex);
+                            i++;
+                            raftLeaderEndpoint = endpoint_uri[i];
+                            response = await client.GetAsync(raftLeaderEndpoint.ToString() + "status");
+                            break;
+                        case -2146233088:
+                            throw new RqLiteQueryException(sqlStatements.ElementAt(0), response);
+                            break;
+                        default:
+                            throw ex1;
                     }
-                    raftLeaderEndpoint = endpoint_uri[i];
                     ex = ex1;
                     continue;
                 }
