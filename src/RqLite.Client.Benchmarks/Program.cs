@@ -22,75 +22,82 @@ namespace RqLite.Client.Benchmarks
 ];");
         }
 
+        static int total = 0;
+
         static async Task Main(string[] args)
         {
             List<string> series = new List<string>();
             List<double> opssecs = new List<double>();
             List<double> maxC = new List<double>();
             var results = new ConcurrentBag<string>();
-            var concurrent = 25;
-            var tasks = new Task[concurrent];
+            var concurrent = 100;
+            var tasks = new List<Task>();
             var semaphore = new SemaphoreSlim(concurrent, concurrent);
             var  connectionString = "http://localhost:4001,http://localhost:4003,http://localhost:4005";
             Console.WriteLine("Hello World!");
             RqLiteFlags maskDefault = (RqLiteFlags.Pretty | RqLiteFlags.Timings | RqLiteFlags.Transaction);
             RqLiteFlags maskTransaction = (RqLiteFlags.Transaction);
             var client = new RqLiteClient(connectionString);
-           // var dropTable = client.Execute("DROP TABLE FOO");
-            //var createTable = client.Execute("CREATE TABLE FOO (age int)");
+            var dropTable = client.Execute("DROP TABLE FOO");
+            var createTable = client.Execute("CREATE TABLE FOO (scalar int)");
             // Assert.Equal(dropTable, createTable);
             int max = 0;
-            int sampleSize = 25/concurrent;
+            int sampleSize = 1000/concurrent;
             object sync = new object();
-            for (int j = 0; j < 10;j++) {
+
+            var K1 = "";
+            for (int i = 0; i < 10; i++) {
+                K1 += "zjmryyztvfmgahbwgqvglyyktbzcfupxijnbuxlnkphyogekoisvlzwgnzpfxmwbxqrtyezjkrnmmzfyrbtgbsmubnsowoxiylggutwgxghsdipifznmdxdxyzepjdbujenczeokxmjpvdnwvkmnpmkvcgyzkkepqeiooryngklychthrwxhwvdrydsobovcfymewjtukcuvmsftumwprqfcxdfepqruzopnxdmtnyoqoowpqymhlwxhkvqomrmkefnirilfpedxdbbprrupqntdmhqozxapstvzvnqzsfhbrlszdwuhcybpkjxusgqjjzieatqwhilddzdkusziirmbdhhajsowmxwqkbhxenwmjpvrajwvjkcphptnsgiyyulgrtrtkidkoxyipousvrikxufkhbrrdqhzqxazlkdqrajvguluivhkgbhccnihbgnvebygoovvklphrihsgiaxhpaxnqexadjenqobyulxmswmhpjvpalxolbzqverqmvlfirqkhiowbwkfbvbhlhrjzpbjwumhunnrmrukivemdlgvaewhbfcqlulzsppmhbbnhzkawbjrwxjalglngferbudvdnzmluagexliepsxovogmpchfsratrpbojdjjvhuxklwwmwiototrsqgfghqcspkliwtdvcciioctbaweevoszybpuarxeoxuphwdzewizargyzlaemyopumtremdujgpiciexrifmuzrjaksvdqunqymowkzhjswhbngnjrngcdcaecazixdjgqvlkkjixqbpbyzkelmrqyujgtzgmdcgtlgvpcunwlgbspqvucnqzlyucbnvguaeytttfuaxyphobnlmetmluiynuglbqzdyzwgadceexcchyexojaxestfdjxfwzjkrhvijewuqsespczezbbfrajzwcaksgiqlontoisnzwdcvocdzlfabrozvmjawlzmdsdeypmxikrikrjshvqrhngayvtewfzovnfescchbepnusttmjnywiidcopywvishkaezfnbaojtifgjvtsgsdtandlrepfonoixkpszncfetpjcipacdzihvbprljyrizbjeqzpvngymcvwqoeikprxmapinabnnpapzvqoihxjvzwuawvmclrtggvjnuzcbhfrcybncojyubvwjwgaidgocrxwjfcxvehxoxapcpqzilbrzjapkscsylboztadajngiilwsnfnshaxruotzxembxlmcxwsemngeqdjuwoptuduomjphiggfesqcsiefcximhsaybxnuzglzbsybvechbksojvhwwcaqmptkzizjiunyekeheoguwbglzysvxqdwtdnzlaropbnpegapslexhlytrnznawsgcznjkmoqfrheaplnxzvzvtwjlayalpinowhukvzqmonappiifpntzmfukmnydeytxkipzxnnnxwvrxetksouxuedvactpjjidpcpvxlmirtroduecsrcapaneiqftgkadpmfatyfiyjafrdyohneakdiueibesseeenjkywhtmkxrcfkdsfezieyanianmyqdklknfuaokyscmnorcctgtigkeflkqlcmgbrctgytlgydkicghifywdauwdhoydbqirpunqdibcxezzuhwhjvpqitchgkswmfzxkaimipicqojgkcmzsfgcnmtgeqjczytzlsbmnspcppydpzfqjfsfqczsyytkuqlaxnzmaifvxdyyngctjdifytgfmcoiewjnismhzsdbctladwcemltedqcxxlcbfpgcfhjbfphddkcicrrrvtckhwdjfhhtpabgsflmnjvxuuiylhamwkryppsfazajutfzkgwldxwxuxetjuzbihgjmdhibbkwkaceklxypqtojcsxhsntanxnlfsrjneuyrnclumkfbvovnuyoovmeasockmbyjmbgqqzjbybkacykqwsdlgxnbewxaevjidqousxuszzawlgvhylksimijwxbjyghomlnjzlwgmectedxxcnvybvslgeixdkkvhenbwsnkmczmjrqgptqoueytoludlpokcootvndmzbanvzojrutmtyiwrmrdevgtizjdayokvwrkzzdvwpjlyhvuzlyhesqokxuzddyerdcjowwdggfuciffilxxklbhadjbhodsrtrgiumiqqksnzdyxyvvtngsvmttmiwtmorwyrrwdgsbivraagemripoixqfmwvblmdmyghntyamqooncdnqbrmepgbilxgqqnepywtfdnmhqgfqbptdtyxuszkehuafzxjuicbaseafmbvsjgswgzrhnhtfimvmxyfmnyzvmihnqcmpunyajwkhrajopquzgriucscebelkleatiwnragwgxnfelzuhjzmmeuinjvwmcxhjpvneieckedibllcztuaszltpjtfuspknatazhzrwsumfrvbhidtevkuisywoycvglgtvvibozjcvzxtllakrsrfnotzohxlwiyttssgerpvdlcvdvgftouqahzosjtlmrksgguuyenhyyyfygntgqszevmlkkgkkjcrbwtfpneahmmoaemmztokhlyajnhyvyuapcxapakesunwqjdufkvtokmcksrniitsbqnvwgydxucpyfndwqrfyxhwsvyoaoohibpnscsejriqtildjxvyufwvhddqxhycpygdxggagaiadirfxslsklsklqpktjxvtisiomskilnotvuswgqnxgvluibibrsydrqtppdxiugncdazpgviwsqhvbtuwfimqxmybcduxcylfkhdjoiprxbruhkdpuidwvxvchenvtymkboommwxpdpfqcubledcvgrtdnwbgmelldouvhshcmhfdpzlmjsrmtjntkbefylvxszdhqlvofczxacwitcdhvdlemgmhvpnsbfcbzpedzepsnzulzovjvrqqqhdrkjkvsyfjtantejihbekijcyaeqalrfdlesibqykggaumwspnkszlgkvuzgpccjbdhqidcxoveyuztabjhbjofxcnodjntybopuxoglycprnihsgktisluqiuuooujcaxvcxnubxlwvcolcpnxblkfzupfplsotdyfzorxcfanpyzfpvyqeeiotfdnbsiefpyinoxbhgezaalexdjdcqhmwulycoildflrgdlkrwmzvsdslnwhjwkhzisrbldxukhazgntlabojcpdfwwputadwdjqzhpazksldomjagvfwdhvscbzarqllaptidzbecyegwvlgcwvvsxdopdecnghonmjryfizoywhccazfgwicratcnldcifoxldafdocgajmtbyxfgosolmhhnhdnhltfgsnzfncvfudqeewbetapdlppafyskvzluusqeiubpiroqldvkbyrztvgtnuylcppideqvjybutdqevniyjztthqiyjjqdvdmqjadhtugzphzzabawfhkdvwocekhqgudovkmgncqpsxouwydckuppzrmdltnsdwwkmxlbewymvabiukhbuvfibxcxdmcgprvufonypjjbkjkvuvpyqevqixsvutadvyblceybaokeckyhgewebgozdjrtuqzcnkewglhofyiackjrtulbtedmpiepuqzojndnzzllaiaitdehqjpihkclpesivnolqhulatdfzdyxyedioacptljkufpihckkjembyvhqdsiwphkqshouynxecflxmkverlrgwxssyxxxsmrwqqwpgbzfadamieslqygoqcchhboujguwyzuhuwqvkuoxmcdcdfffuaqitzhmfmxwkjqikiavjhllihhnujsqrpujiwaokbypaoibyfzashrazrrmhmzbplnqaxweoeragupifbsnvwrgcqmiejsxyeiosfatdcgzrucucgolhhgzipbfvxykwxzmhssqngxaoclxtxjansxpmtxdsmaqnomgejuvaxtvhkvdehnhrsssujtkuqmzhvksxhwjdazbhwggrnslpsfwbnbgvqcczpvfcbpapwzmcfotvjkufeijxwtkldrfvrtlupvtmgpqzocyczoyhkxrlxrybdynbenqtkqxdyxbinbrfilrgianehakjtnfhqeybrajizofhwjvqmhrcyafjuxrsbvextwrrhmqptaljeqhnpwlsxuuwiogfqnjihfphsblcjyhzxjsahrpmbuclpvyyilbplkctkyxtiwbaybedatanlzzqsiqhsghdatquzwijlrazkaoeojmwzryqtqsqvebkoznhmcyljhkpovetdcyldnelfrbwpdwvxubtjnkbrumhvocodrceyfjtejmbnljuhxsfijvmvikhsznnxerdxnspncvhoeaequsyyqeemepswmtdrwmoxqsdqmbzfqqrpbuatxoupkyiwgypdzevoimcfxwyyxcndjsdctqqizsjmwvpkwlvutlzunbldfzcuzddhwakbdocdehmxciahxkcvbcybkeblrdorrtyvbcutdpjrcalbyodjkypkcyhkcjtgejgmwqpyofuhkjjxtxvbquueqfeewyfpfjhafiimjqmrycxgopulibqptswimutkmpfsmnararksleysamseaoypxgtlnecfcemhutgoqvvnapiefnortruqxaxgkzmzngiitdaalmwdwyybnyvmstpyywjlquwtbdveivkkxfkctuymziehdwvvjaqtsjogmpnwbxhptuwyuuhofhyaeqgytcpflnynocaeezalagexvjiaqydzowoxuywhhwrahevlgfqbixtavdiugrbpfvodlwrsyfsyxzogweytjsqgteursljvhtosrfbtowqkcvtmoqjdwewmhtlpmqarrrkstiejkqkmfokgpdmqtqnkecqfioftzusgapsyvvvzcaeqaiohatkkjgxrndbxwrumxlcbpdcxhaydlvyhspdaijhkatcxtigekfeanfwltlngvqalqtuciofqmjtwzxldhcafxagzcotnwarwwdpxujiughcuxcnskxbewqitpgspzivzcb";
+            }
+            for (int j = 0; j < 10+1;j++) {
+                Random r = new Random();
+                semaphore = new SemaphoreSlim(concurrent);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                tasks = new Task[concurrent];
-                try
-                {
-                    for (int i = 0; i < sampleSize; i++)
+                tasks = new List<Task>();
+                for (int i = 0; i < sampleSize; i++) 
+                { 
+                
+                    for (int k = 0; k < concurrent; k++)
                     {
-                        for (int k = 0; k < concurrent; k++)
+                        tasks.Add(Task.Run(async() =>
                         {
-                            tasks[k] = Task.Run(async() =>
+                            try
                             {
-                                
-                                try
-                                {
-                                    await semaphore.WaitAsync();
-                                    var client1 = new RqLiteClient(connectionString);
-                                    results.Add(await client1.ExecuteAsync("INSERT INTO FOO VALUES(?)", (i + 1) * (j + 1), (i + 1) * (j + 1)));
-                                }
-                                catch (Exception ex)
-                                {
-
-                                }
-                                finally
-                                {
-                                    semaphore.Release(1);
-                                }
-                            });
-                            
-                        }
+                                await semaphore.WaitAsync();
+                                await Task.Delay(r.Next(1, 30));
+                                results.Add(await client.ExecuteAsync("INSERT INTO FOO VALUES(?)", Interlocked.Increment(ref Program.total)));
+                            }
+                            finally
+                            {
+                                semaphore.Release(1);
+                            }
+                        }));
                     }
                 }
-                catch (RqLiteQueryException ex)
-                {
-                   // Console.WriteLine(ex.Message);
-                }
-               // Thread.Sleep(1000);
-                Task.WaitAll(tasks);
-                sw.Stop();
-                double opssec = Math.Round((double)sampleSize*concurrent / sw.ElapsedMilliseconds * 1000, 2);
-                var total = client.Execute("SELECT COUNT(*) FROM foo");
+                Task.WaitAll(tasks.ToArray());
+                var total = client.Query("SELECT count(*) FROM foo");
                 Console.WriteLine(total);
-                Console.WriteLine($"avg: {sw.ElapsedMilliseconds / (sampleSize * concurrent)}ms concurrent: {concurrent} ops/sec: {opssec} total:{concurrent*sampleSize} time:{sw.ElapsedMilliseconds}");
-                series.Add($"run {j}");
-                opssecs.Add(opssec);
-                maxC.Add(max);
-                writeJs(series, opssecs, concurrent);
-                max = 0;
-               // semaphore.Release(concurrent);
+
+                if (j != 0)
+                {
+                    Console.WriteLine(tasks.Count);
+
+                    sw.Stop();
+                    double opssec = Math.Round((double)((double)(sampleSize * concurrent) / sw.ElapsedMilliseconds) * 1000, 2);
+
+                    Console.WriteLine("--->" + Program.total + "-->" + results.Count);
+                    Console.WriteLine($"avg: {(double)sw.ElapsedMilliseconds / (double)(sampleSize * concurrent)}ms concurrent: {concurrent} ops/sec: {opssec} total:{concurrent * sampleSize} time:{sw.ElapsedMilliseconds}");
+                    series.Add($"run {j}");
+                    opssecs.Add(opssec);
+                    maxC.Add(max);
+                    writeJs(series, opssecs, concurrent);
+                    max = 0;
+                    semaphore.Release(concurrent);
+                    Console.WriteLine("wait 5 secs");
+                    await Task.Delay(5000);
+
+                }
             }
             File.WriteAllText(@"./results.json", JsonSerializer.Serialize(results));
 

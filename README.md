@@ -95,6 +95,8 @@ var readFiona = await client.QueryAsync("SELECT * FROM foo WHERE name=?", parame
 
 ## Integration Tests
 
+### Single rqlite Node
+
 The project contains a couple of simple integration tests. To test, it suffices to start up a single node rqlite docker container.
 
 ```
@@ -133,3 +135,42 @@ be upgraded to leader (from Follow state) on port 4002. This will be sufficient 
 [rqlited] 2021/01/29 23:29:04 node is ready
 
 ```
+
+### rqlite 3 node cluster
+
+The integration tests has a constant called: `CLUSTERTEST` defined in the RqLite.Client.Tests.cpsoj
+
+```XML
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;CLUSTERTEST</DefineConstants>
+  </PropertyGroup>
+```
+
+This allows you to write mixed tests, for either single or multi node tests. Consider the following
+integration test as an example:
+
+```csharp
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async void CanConnectToCluster()
+        {
+            var target = new RqliteRaftClient(connectionString);
+            var nodes = await target.ConnectAsync();
+#if CLUSTERTEST
+            Assert.Equal(3, nodes.Count());
+#else
+            Assert.Equal(1, nodes.Count());
+#endif
+        }
+```
+
+To spin up a the 3 node cluster (without docker) with correct ports as used by the integration tests:
+
+```
+$ rqlited -node-id 1 -http-addr localhost:4001 -raft-addr localhost:4002 ./node1
+$ rqlited -node-id 2 -http-addr localhost:4003 -raft-addr localhost:4004 -join http://localhost:4001 ./node2
+$ rqlited -node-id 3 -http-addr localhost:4005 -raft-addr localhost:4006 -join http://localhost:4001 ./node3
+```
+
+
+
